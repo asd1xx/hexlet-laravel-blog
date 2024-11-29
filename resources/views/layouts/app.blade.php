@@ -11,6 +11,9 @@
     </head>
     <body>
         <div class="container mt-4">
+            <div>
+                <a href="{{ route('articles.index') }}">Статьи</a>
+            </div>
             <h1>@yield('header')</h1>
             <div>
                 @yield('content')
