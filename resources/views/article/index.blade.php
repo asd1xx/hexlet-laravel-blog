@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('title', 'Статьи')
 @section('content')
     {{ html()->form('GET', route('articles.index'))->open() }}
         {{ html()->input('text', 'search', $dataSearch) }}
