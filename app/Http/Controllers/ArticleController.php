@@ -26,7 +26,7 @@ class ArticleController extends Controller
     public function show($id)
     {
         $article = Article::findOrFail($id);
-        return view('article.show', compact('article'));
+        return view('article.show', compact('article', 'id'));
     }
 
     public function create()
@@ -46,6 +46,31 @@ class ArticleController extends Controller
         $article->fill($dataRequest);
         $article->save();
 
-        return redirect()->route('articles.index');
+        return redirect()->route('articles.index')
+            ->with('success', 'Статья успешно создана!');
+    }
+
+    public function edit($id)
+    {
+        $article = Article::findOrFail($id);
+        return view('article.edit', compact('article'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $article = Article::findOrFail($id);
+        $dataRequest = $request->validate([
+            // У обновления немного измененная валидация
+            // В проверку уникальности добавляется название поля и id текущего объекта
+            // Если этого не сделать, Laravel будет ругаться, что имя уже существует
+            'name' => "required|unique:articles,name,{$article->id}",
+            'body' => 'required|min:5',
+        ]);
+
+        $article->fill($dataRequest);
+        $article->save();
+
+        return redirect()->route('articles.index')
+            ->with('success', 'Статья успешно обновлена!');
     }
 }
